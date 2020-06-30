@@ -10,9 +10,6 @@ def init_texts():
         title=Text.TITLES['cart'],
         body='Вы перешли в корзину'
     )
-
-
-def init_texts_next():
     Text.objects.create(
         title=Text.TITLES['to_cart'],
         body='Вы добавляете товар в корзину'
@@ -52,5 +49,4 @@ def init_texts_next():
 
 
 if __name__ == '__main__':
-    # init_texts()
-    init_texts_next()
+    init_texts()
