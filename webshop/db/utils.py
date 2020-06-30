@@ -48,10 +48,6 @@ def init_texts():
     )
     Text.objects.create(
         title=Text.TITLES['empty_cat'],
-        body='Подкатегория пуста'
-    )
-    Text.objects.create(
-        title=Text.TITLES['empty_sub'],
         body='Категория пуста'
     )
 
