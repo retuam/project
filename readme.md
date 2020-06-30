@@ -1,11 +1,11 @@
 #STACK:
 
-Telebot
-Flask (flask restfull)
-MongoDB
-VPS - virtual private server, Google Cloud
-Webhook
-Marshmallow
+1. Telebot
+2. Flask (flask restfull)
+3. MongoDB
+4. VPS - virtual private server, Google Cloud
+5. Webhook
+6. Marshmallow
 #Functionality
 
 Бот 1.1. Предоставлять пользователю список доступных категорий (с подкатегорями); 1.2. Предоставлять пользователю список доступных продуктов, определенной категории 1.3. Просмотр информации о продукте (изображение, описание, цена, скидка) 1.4. Корзина 1.5. Оформление заказов 1.6. Просмотр содержимого корзины 1.7. Просмотр продуктов со скидкой
