@@ -1,4 +1,4 @@
-from .models import Category, Products, ProductsAttribute
+from models import Category, Products, ProductsAttribute
 from random import randint, choice
 
 
