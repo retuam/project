@@ -136,7 +136,3 @@ def from_cart_click(call):
 
 def start_bot():
     bot.polling()
-
-
-if __name__ == '__main__':
-    start_bot()
