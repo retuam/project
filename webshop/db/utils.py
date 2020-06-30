@@ -46,6 +46,14 @@ def init_texts():
         title=Text.TITLES['finish'],
         body='Вы завершаете покупку'
     )
+    Text.objects.create(
+        title=Text.TITLES['empty_cat'],
+        body='Подкатегория пуста'
+    )
+    Text.objects.create(
+        title=Text.TITLES['empty_sub'],
+        body='Категория пуста'
+    )
 
 
 if __name__ == '__main__':

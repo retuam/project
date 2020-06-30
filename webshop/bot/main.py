@@ -87,16 +87,23 @@ def category_click(call):
         subcategories = category.subcategories
         buttons = [InlineKeyboardButton(text=category.title, callback_data=f'{category_lookup}{separator}{category.id}')
                    for category in subcategories]
-        kb.add(*buttons)
-        bot.edit_message_text(category.title, chat_id=call.message.chat.id,
-                              message_id=call.message.message_id, reply_markup=kb)
+        if buttons:
+            kb.add(*buttons)
+            bot.edit_message_text(category.title, chat_id=call.message.chat.id,
+                                  message_id=call.message.message_id, reply_markup=kb)
+        else:
+            bot.edit_message_text(category.title + Text.TITLES['empty_sub'], chat_id=call.message.chat.id, message_id=call.message.message_id)
     else:
         products = category.get_products()
         buttons = [InlineKeyboardButton(text=product.title, callback_data=f'{product_lookup}{separator}{product.id}')
                    for product in products]
-        kb.add(*buttons)
-        bot.edit_message_text(category.title, chat_id=call.message.chat.id,
-                              message_id=call.message.message_id, reply_markup=kb)
+        if buttons:
+            kb.add(*buttons)
+            bot.edit_message_text(category.title, chat_id=call.message.chat.id,
+                                  message_id=call.message.message_id, reply_markup=kb)
+        else:
+            bot.edit_message_text(category.title + Text.TITLES['empty_cat'], chat_id=call.message.chat.id,
+                                  message_id=call.message.message_id)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.split(separator)[0] == product_lookup)
