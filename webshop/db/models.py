@@ -67,45 +67,48 @@ class User(me.Document):
 
 class Cart(me.Document):
     user = me.ReferenceField('User')
-    products = me.ListField(me.ReferenceField('Products'))
+    product = me.ReferenceField('Products')
+    qty = me.IntField(default=1, min_length=1)
+    price = me.DecimalField(required=True)
 
-    def add_products(self, product: 'Products'):
-        self.products.append(product)
-        self.save()
-
-    def delete_products(self, product: 'Products'):
-        self.products.pop(product)
-        self.save()
-
-    def price(self):
+    @classmethod
+    def price(cls):
         _sum = 0
-        for product in self.products:
-            _sum += product.extended_price()
+        for product in cls.objects():
+            _sum += product.price
+        return _sum
+
+    @classmethod
+    def user_price(cls, user):
+        _sum = 0
+        for product in cls.objects(user=user):
+            _sum += product.price
         return _sum
 
 
 class Order(me.Document):
     user = me.ReferenceField('User')
-    products = me.ListField(me.ReferenceField('Products'))
+    product = me.ReferenceField('Products')
+    qty = me.IntField(default=1, min_length=1)
+    price = me.DecimalField(required=True)
     created = me.DateTimeField(default=datetime.datetime.now())
+
+    @classmethod
+    def price(cls):
+        _sum = 0
+        for product in cls.objects():
+            _sum += product.price
+        return _sum
+
+    @classmethod
+    def user_price(cls, user):
+        _sum = 0
+        for product in cls.objects(user=user):
+            _sum += product.price
+        return _sum
 
 
 class Text(me.Document):
-
-    TITLES = {
-        'greetings': 'Текст приветствия',
-        'cart': 'В Вашей корзине следующие товары',
-        'to_cart': 'Добавить в корзину',
-        'from_cart': 'Для удаления товара из корзины, выберите товар',
-        'category': 'Выберите категорию',
-        'add': 'Товар добавлен в корзину',
-        'erase': 'Очищено',
-        'checkout': 'Оплачено',
-        'empty': 'Корзина пуста',
-        'discount': 'Товары со скидкой',
-        'empty_cat': ' Товары отсутствуют',
-        'finish': 'Для завершения покупки нажмите "Оплата", для очистки корзины нажмите "Очистить"',
-    }
-
-    title = me.StringField(min_length=1, max_length=256, choices=TITLES.values(), unique=True)
+    title = me.StringField(min_length=1, max_length=256, unique=True)
+    slug = me.StringField(min_length=1, max_length=32, unique=True)
     body = me.StringField(min_length=1, max_length=4096)

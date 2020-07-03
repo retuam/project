@@ -8,3 +8,9 @@ CART_KB = {
     'checkout': 'Оплата',
     'erase': 'Очистить',
 }
+
+SINGLE_KB = {
+    'plus': '+',
+    'minus': '-',
+    'delete': 'x',
+}

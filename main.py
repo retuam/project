@@ -1,10 +1,12 @@
-from webshop.bot.main import start_bot, bot
+from webshop.bot.main import bot
 from webshop.bot import config
 from flask import Flask, request, abort
 from telebot.types import Update
+from webshop.api.main import api_bp
 
 
 app = Flask(__name__)
+app.register_blueprint(api_bp)
 
 
 @app.route(config.WEBHOOK_PATH, methods=['POST'])

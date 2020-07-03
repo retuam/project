@@ -3,52 +3,84 @@ from models import Text
 
 def init_texts():
     Text.objects.create(
-        title=Text.TITLES['greetings'],
+        title='Текст приветствия',
+        slug='greetings',
         body='Рады приветсвовать Вас в нашем интернет магазине'
     )
     Text.objects.create(
-        title=Text.TITLES['cart'],
+        title='В Вашей корзине следующие товары',
+        slug='cart',
         body='Вы перешли в корзину'
     )
     Text.objects.create(
-        title=Text.TITLES['to_cart'],
+        title='Добавить в корзину',
+        slug='to_cart',
         body='Вы добавляете товар в корзину'
     )
     Text.objects.create(
-        title=Text.TITLES['from_cart'],
+        title='Для удаления товара из корзины, выберите товар',
+        slug='from_cart',
         body='Вы перешли в корзину'
     )
     Text.objects.create(
-        title=Text.TITLES['category'],
+        title='Выберите категорию',
+        slug='category',
         body='Вы выбрали категорию'
     )
     Text.objects.create(
-        title=Text.TITLES['add'],
+        title='Товар добавлен в корзину',
+        slug='add',
         body='Вы добавили товар в корзину'
     )
     Text.objects.create(
-        title=Text.TITLES['erase'],
+        title='Очищено',
+        slug='erase',
         body='Вы очистили корзину'
     )
     Text.objects.create(
-        title=Text.TITLES['checkout'],
+        title='Оплачено',
+        slug='checkout',
         body='Вы оплатили товары'
     )
     Text.objects.create(
-        title=Text.TITLES['empty'],
+        title='Корзина пуста',
+        slug='empty',
         body='Ваша корзина пуста'
     )
     Text.objects.create(
-        title=Text.TITLES['discount'],
+        title='Товар удален',
+        slug='product_empty',
+        body='Вы удалили товар из корзины'
+    )
+    Text.objects.create(
+        title='Товары со скидкой',
+        slug='discount',
         body='Вы выбрали товары со скидкой'
     )
     Text.objects.create(
-        title=Text.TITLES['finish'],
+        title='Для завершения покупки нажмите "Оплата", для очистки корзины нажмите "Очистить"',
+        slug='finish',
         body='Вы завершаете покупку'
     )
     Text.objects.create(
-        title=Text.TITLES['empty_cat'],
+        title='Товары отсутствуют',
+        slug='empty_cat',
         body='Категория пуста'
+    )
+    Text.objects.create(
+        title='Общая стоимость',
+        slug='total',
+        body='Общая стоимость'
+    )
+    Text.objects.create(
+        title='Для добавления товара нажимете "+", для уменьшение товара нажмите "-", для удаление нажмите "x"',
+        slug='change',
+        body='Изменение количества'
+    )
+    Text.objects.create(
+        title='Просмотр товара',
+        slug='product',
+        body='Вы просматриваете карточку товара'
     )
 
 

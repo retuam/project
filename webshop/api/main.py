@@ -1,10 +1,11 @@
-from flask import Flask
+from flask import Blueprint
 from flask_restful import Api
-from .resources import *
+from webshop.api.resources import *
 
 
-app = Flask(__name__)
-api = Api(app)
+api_bp = Blueprint('api', __name__)
+api = Api(api_bp)
+
 
 api.add_resource(
     TotalResource,
@@ -15,8 +16,12 @@ api.add_resource(
     ProductResource,
     '/product',
     '/product/category/<category_id>',
-    '/product/subcategory/<subcategory_id>',
-    '/product/<id>'
+    '/product/<id>',
+)
+
+api.add_resource(
+    ImageResource,
+    '/upload/<id>'
 )
 
 api.add_resource(
@@ -41,6 +46,12 @@ api.add_resource(
     OrderResource,
     '/order',
     '/order/<id>'
+)
+
+api.add_resource(
+    TextResource,
+    '/text',
+    '/text/<id>'
 )
 
 if __name__ == '__main__':
