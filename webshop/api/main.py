@@ -1,13 +1,11 @@
 from flask import Flask, Blueprint
 from flask_restful import Api
-from resources import *
+from .resources import *
 
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
 
-# app = Flask(__name__)
-# api = Api(app)
 
 api.add_resource(
     TotalResource,
@@ -55,6 +53,3 @@ api.add_resource(
     '/text',
     '/text/<id>'
 )
-
-if __name__ == '__main__':
-    app.run(debug=True)

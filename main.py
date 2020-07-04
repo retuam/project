@@ -2,11 +2,10 @@ from webshop.bot.main import bot, test_bot
 from webshop.bot import config
 from flask import Flask, request, abort
 from telebot.types import Update
-from webshop.api import main as amn
+from webshop.api.main import api_bp
 
 
 app = Flask(__name__)
-# app.register_blueprint(amn.api_bp)
 
 
 # @app.route('/', methods=['GET'])
@@ -19,6 +18,9 @@ app = Flask(__name__)
 # def test():
 #     print(10)
 #     return 20
+
+
+app.register_blueprint(api_bp)
 
 
 @app.route(config.WEBHOOK_PATH, methods=['POST'])
