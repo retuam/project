@@ -7,6 +7,7 @@ from .lookups import *
 
 
 bot = TeleBot(TOKEN)
+test_bot = 100
 
 
 def keyboard(message, txt):
