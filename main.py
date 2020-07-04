@@ -1,24 +1,24 @@
-from webshop.bot.main import bot
+from webshop.bot.main import bot, test_bot
 from webshop.bot import config
 from flask import Flask, request, abort
 from telebot.types import Update
-# from webshop.api.main import api_bp
+from webshop.api.main import api_bp
 
 
-app = Flask(__name__)
+# app = Flask(__name__)
 # app.register_blueprint(api_bp)
 
 
-@app.route('/', methods=['GET'])
-def index():
-    print(1)
-    return 2
-
-
-@app.route('/test', methods=['GET'])
-def test():
-    print(10)
-    return 20
+# @app.route('/', methods=['GET'])
+# def index():
+#     print(1)
+#     return 2
+#
+#
+# @app.route('/test', methods=['GET'])
+# def test():
+#     print(10)
+#     return 20
 
 
 # @app.route(config.WEBHOOK_PATH, methods=['POST'])
@@ -35,10 +35,11 @@ def test():
 if __name__ == '__main__':
     # bot.polling()
     # import time
-    # bot.remove_webhook()
+    bot.remove_webhook()
+    print(test_bot)
     # time.sleep(1)
     # bot.set_webhook(
     #     config.WEBHOOK_URL,
     #     certificate=open('webhook_cert.pem', 'r')
     # )
-    app.run(debug=True)
+    # app.run(debug=True)
