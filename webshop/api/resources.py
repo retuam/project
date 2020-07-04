@@ -1,6 +1,6 @@
 from flask_restful import Resource
-from webshop.api.schemas import *
-from webshop.db.models import *
+from schemas import *
+from ..db.models import *
 from flask import request, jsonify
 import json
 from marshmallow import ValidationError
