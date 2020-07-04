@@ -4,51 +4,57 @@ from .resources import *
 
 
 api_bp = Blueprint('api', __name__)
-api = Api(api_bp)
+building_api = Api(api_bp)
 
 
-api.add_resource(
+@api_bp.route('/test')
+def index():
+    print(1)
+    return 2
+
+
+building_api.add_resource(
     TotalResource,
     '/',
 )
 
-api.add_resource(
+building_api.add_resource(
     ProductResource,
     '/product',
     '/product/category/<category_id>',
     '/product/<id>',
 )
 
-api.add_resource(
+building_api.add_resource(
     ImageResource,
     '/upload/<id>'
 )
 
-api.add_resource(
+building_api.add_resource(
     CategoryResource,
     '/category',
     '/category/<id>'
 )
 
-api.add_resource(
+building_api.add_resource(
     SubcategoryResource,
     '/subcategory',
     '/subcategory/<id>'
 )
 
-api.add_resource(
+building_api.add_resource(
     CartResource,
     '/cart',
     '/cart/<id>'
 )
 
-api.add_resource(
+building_api.add_resource(
     OrderResource,
     '/order',
     '/order/<id>'
 )
 
-api.add_resource(
+building_api.add_resource(
     TextResource,
     '/text',
     '/text/<id>'

@@ -8,19 +8,10 @@ from webshop.api.main import api_bp
 app = Flask(__name__)
 
 
-# @app.route('/', methods=['GET'])
-# def index():
-#     print(1)
-#     return 2
-#
-#
-# @app.route('/test', methods=['GET'])
-# def test():
-#     print(10)
-#     return 20
-
-
-app.register_blueprint(api_bp)
+@app.route('/test2')
+def index():
+    print(10)
+    return 20
 
 
 @app.route(config.WEBHOOK_PATH, methods=['POST'])
@@ -32,6 +23,9 @@ def webhook():
         return ''
     else:
         abort(403)
+
+
+app.register_blueprint(api_bp)
 
 
 if __name__ == '__main__':
