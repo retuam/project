@@ -37,10 +37,10 @@ if __name__ == '__main__':
     # bot.polling()
     import time
     bot.remove_webhook()
-    print(test_bot)
     time.sleep(1)
     bot.set_webhook(
         config.WEBHOOK_URL,
         certificate=open('webhook_cert.pem', 'r')
     )
+    print(test_bot)
     # app.run(debug=True)
