@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 
 @app.route('/test2')
-def index():
+def index2():
     print(10)
     return 20
 
@@ -30,9 +30,9 @@ def index():
 if __name__ == '__main__':
     print(test_bot)
     # bot.polling()
-    import time
-    bot.remove_webhook()
-    time.sleep(1)
+    # import time
+    # bot.remove_webhook()
+    # time.sleep(1)
     # bot.set_webhook(
     #     config.WEBHOOK_URL,
     #     certificate=open('webhook_cert.pem', 'r')
