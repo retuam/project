@@ -1,7 +1,6 @@
 from flask_restful import Resource
-from schemas import CategorySchema, SubcategorySchema, ProductsAttributeSchema, ProductSchema, UserSchema, CartSchema, \
-    OrderSchema, TextSchema
-from .db.models import Category, Order, Text, Cart, Products, User, ProductsAttribute
+from schemas import *
+from db.models import *
 from flask import request, jsonify
 import json
 from marshmallow import ValidationError
