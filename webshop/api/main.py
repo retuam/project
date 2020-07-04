@@ -10,7 +10,7 @@ building_api = Api(api_bp)
 @api_bp.route('/test')
 def index():
     print(1)
-    return 2
+    return f'2'
 
 
 building_api.add_resource(

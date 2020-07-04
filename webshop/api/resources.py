@@ -288,6 +288,7 @@ class TotalResource(Resource):
     def get(self):
         data = Products.objects.all()
         agr = 0
+        result = 0
         if len(data):
             for row in data:
                 agr += row.price

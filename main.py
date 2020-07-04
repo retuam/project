@@ -11,7 +11,7 @@ app = Flask(__name__)
 @app.route('/test2')
 def index2():
     print(10)
-    return 20
+    return f'20'
 
 
 @app.route(config.WEBHOOK_PATH, methods=['POST'])
@@ -26,16 +26,14 @@ def webhook():
 
 
 if __name__ == '__main__':
-    print(test_bot)
     # bot.polling()
     import time
-    bot.remove_webhook()
+    # bot.remove_webhook()
     # time.sleep(1)
     # bot.set_webhook(
     #     config.WEBHOOK_URL,
     #     certificate=open('webhook_cert.pem', 'r')
     # )
-    print(test_bot)
-    # app.register_blueprint(api_bp)
-    # app.run(debug=True)
+    app.register_blueprint(api_bp)
+    app.run(debug=True)
 
