@@ -53,6 +53,3 @@ api.add_resource(
     '/text',
     '/text/<id>'
 )
-
-if __name__ == '__main__':
-    app.run(debug=True)
