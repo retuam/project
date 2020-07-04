@@ -27,7 +27,7 @@ def webhook():
 
 if __name__ == '__main__':
     print(test_bot)
-    bot.polling()
+    # bot.polling()
     import time
     bot.remove_webhook()
     # time.sleep(1)
