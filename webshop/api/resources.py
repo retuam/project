@@ -1,6 +1,6 @@
 from flask_restful import Resource
-from schemas import *
-from models import *
+from .schemas import *
+from .models import *
 from flask import request, jsonify
 import json
 from marshmallow import ValidationError
