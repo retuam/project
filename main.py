@@ -3,6 +3,7 @@ from webshop.bot import config
 from flask import Flask, request, abort
 from telebot.types import Update
 from webshop.api.main import api_bp
+import time
 
 
 app = Flask(__name__)
@@ -25,7 +26,6 @@ def webhook():
         abort(403)
 
 
-import time
 bot.remove_webhook()
 time.sleep(1)
 bot.set_webhook(
