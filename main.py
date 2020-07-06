@@ -27,12 +27,12 @@ def webhook():
 
 if __name__ == '__main__':
     # bot.polling()
-    import time
-    bot.remove_webhook()
-    time.sleep(1)
-    bot.set_webhook(
-        config.WEBHOOK_URL,
-        certificate=open('webhook_cert.pem', 'r')
-    )
-    app.register_blueprint(api_bp)
+    # import time
+    # bot.remove_webhook()
+    # time.sleep(1)
+    # bot.set_webhook(
+    #     config.WEBHOOK_URL,
+    #     certificate=open('webhook_cert.pem', 'r')
+    # )
+    # app.register_blueprint(api_bp)
     app.run(debug=True)
