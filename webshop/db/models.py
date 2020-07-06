@@ -72,17 +72,17 @@ class Cart(me.Document):
     price = me.DecimalField(required=True)
 
     @classmethod
-    def price(cls):
+    def all_price(cls):
         _sum = 0
         for product in cls.objects():
-            _sum += product.price
+            _sum = _sum + float(product.price)
         return _sum
 
     @classmethod
     def user_price(cls, user):
         _sum = 0
         for product in cls.objects(user=user):
-            _sum += product.price
+            _sum = _sum + float(product.price)
         return _sum
 
 
@@ -94,17 +94,17 @@ class Order(me.Document):
     created = me.DateTimeField(default=datetime.datetime.now())
 
     @classmethod
-    def price(cls):
+    def all_price(cls):
         _sum = 0
         for product in cls.objects():
-            _sum += product.price
+            _sum = _sum + float(product.price)
         return _sum
 
     @classmethod
     def user_price(cls, user):
         _sum = 0
         for product in cls.objects(user=user):
-            _sum += product.price
+            _sum = _sum + float(product.price)
         return _sum
 
 

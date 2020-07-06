@@ -25,7 +25,7 @@ def init_texts():
     Text.objects.create(
         title='Выберите категорию',
         slug='category',
-        body='Вы выбрали категорию'
+        body='Выберите категорию'
     )
     Text.objects.create(
         title='Товар добавлен в корзину',
@@ -73,14 +73,19 @@ def init_texts():
         body='Общая стоимость'
     )
     Text.objects.create(
-        title='Для добавления товара нажимете "+", для уменьшение товара нажмите "-", для удаление нажмите "x"',
-        slug='change',
-        body='Изменение количества'
-    )
-    Text.objects.create(
         title='Просмотр товара',
         slug='product',
         body='Вы просматриваете карточку товара'
+    )
+    Text.objects.create(
+        title='Изменение количества',
+        slug='change',
+        body='Для добавления товара нажимете "+", для уменьшение товара нажмите "-", для удаление нажмите "x"'
+    )
+    Text.objects.create(
+        title='Назад',
+        slug='back',
+        body='Назад'
     )
 
 

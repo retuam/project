@@ -181,7 +181,7 @@ class CartResource(Resource):
         if id:
             json_obj = CartSchema().dumps(Cart.objects(id=id).first())
         else:
-            json_obj = CartSchema(many=True).dumps(Cart.get_root_categories().all())
+            json_obj = CartSchema(many=True).dumps(Cart.all())
         return jsonify(json.loads(json_obj))
 
     def post(self):
@@ -217,7 +217,7 @@ class OrderResource(Resource):
         if id:
             json_obj = OrderSchema().dumps(Order.objects(id=id).first())
         else:
-            json_obj = OrderSchema(many=True).dumps(Order.get_root_categories().all())
+            json_obj = OrderSchema(many=True).dumps(Order.all())
         return jsonify(json.loads(json_obj))
 
     def post(self):

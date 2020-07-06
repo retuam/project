@@ -28,6 +28,27 @@ def get_products(category, call, kb):
                               message_id=call.message.message_id)
 
 
+def change(call, cart):
+    kb = InlineKeyboardMarkup()
+    buttons = [
+        InlineKeyboardButton(text=SINGLE_KB['plus'], callback_data=f'{plus_lookup}{separator}{cart.id}'),
+        InlineKeyboardButton(text=SINGLE_KB['minus'], callback_data=f'{minus_lookup}{separator}{cart.id}'),
+        InlineKeyboardButton(text=SINGLE_KB['delete'], callback_data=f'{fromcart_lookup}{separator}{cart.id}')
+    ]
+    kb.add(*buttons)
+    txt = cart.product.title + f' ({cart.qty})\n' + Text.objects(slug='change').first().body
+    bot.edit_message_text(txt, chat_id=call.message.chat.id, message_id=call.message.message_id, reply_markup=kb)
+
+
+def cat_main():
+    kb = InlineKeyboardMarkup()
+    roots = Category.get_root_categories()
+    buttons = [InlineKeyboardButton(text=category.title, callback_data=f'{category_lookup}{separator}{category.id}')
+               for category in roots]
+    kb.add(*buttons)
+    return kb
+
+
 @bot.message_handler(commands=['start'])
 def start(message):
     keyboard(message, Text.objects.get(slug='greetings').body)
@@ -37,12 +58,13 @@ def start(message):
 
 @bot.message_handler(content_types=['text'], func=lambda message: message.text == START_KB['categories'])
 def categories(message):
-    kb = InlineKeyboardMarkup()
-    roots = Category.get_root_categories()
-    buttons = [InlineKeyboardButton(text=category.title, callback_data=f'{category_lookup}{separator}{category.id}')
-               for category in roots]
-    kb.add(*buttons)
-    bot.send_message(message.chat.id, text=Text.objects.get(slug='category').body, reply_markup=kb)
+    bot.send_message(message.chat.id, text=Text.objects.get(slug='category').body, reply_markup=cat_main())
+
+
+@bot.callback_query_handler(func=lambda call: call.data.split(separator)[0] == back_lookup)
+def categories_back(call):
+    bot.edit_message_text(Text.objects.get(slug='category').body, chat_id=call.message.chat.id,
+                          message_id=call.message.message_id, reply_markup=cat_main())
 
 
 @bot.callback_query_handler(func=lambda call: call.data.split(separator)[0] == category_lookup)
@@ -56,7 +78,7 @@ def categories_click(call):
 
         if buttons:
             buttons.append(InlineKeyboardButton(text=Text.objects.get(slug='back').body,
-                                                callback_data=f'{category_lookup}{separator}{category_id}'))
+                                                callback_data=f'{back_lookup}{separator}{category_id}'))
             kb.add(*buttons)
             bot.edit_message_text(category.title, chat_id=call.message.chat.id,
                                   message_id=call.message.message_id, reply_markup=kb)
@@ -81,23 +103,26 @@ def product_click(call):
     product_id = call.data.split(separator)[1]
     product = Products.objects.get(id=product_id)
     kb = InlineKeyboardMarkup()
-    kb.add(InlineKeyboardButton(text=Text.objects.get(slug='to_cart').body,
+    kb.add(InlineKeyboardButton(text=Text.objects.get(slug='to_cart').title,
                                 callback_data=f'{tocart_lookup}{separator}{product.id}'))
 
-    txt = f'''{product.title} \n price: {product.price} \n discount: {product.discount} \n stock: {product.in_stock} 
-    \n {product.description}'''
+    txt = f'''{product.title} 
+     - price: {product.price}
+     - discount: {product.discount}
+     - stock: {product.in_stock}
+     
+     {product.description}'''
 
-    bot.send_photo(call.message.chat.id, product.image)
-    bot.send_message_text(txt, chat_id=call.message.chat.id, reply_markup=kb)
+    bot.send_photo(call.message.chat.id, product.image, caption=txt, reply_markup=kb)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.split(separator)[0] == tocart_lookup)
 def to_cart_click(call):
-    cart = Cart.objects
+    cart = Cart()
     cart.user = User.objects(uid=call.from_user.id).first()
     product_id = call.data.split(separator)[1]
     product = Products.objects.get(id=product_id)
-    cart.price = round(product.price * (100 - product.discount), 2)
+    cart.price = round(product.price * (100 - product.discount) / 100, 2)
     cart.product = product
     cart.save()
     kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
@@ -107,83 +132,78 @@ def to_cart_click(call):
 
 @bot.message_handler(content_types=['text'], func=lambda message: message.text == START_KB['my_cart'])
 def my_cart(message):
-    carts = Cart.objects(user=User.objects(uid=message.from_user.id).first()).all()
-    cart_products = [cart.product for cart in carts]
-    if cart_products:
-        kb = InlineKeyboardMarkup()
-        buttons = [InlineKeyboardButton(text=product.title, callback_data=f'{change_lookup}{separator}{product.id}')
-                   for product in cart_products]
-        kb.add(*buttons)
-        bot.send_message(message.chat.id, text=Text.objects.get(slug='from_cart').body, reply_markup=kb)
-        kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-        kb.add(*[KeyboardButton(text=text) for text in CART_KB.values()])
-        bot.send_message(message.chat.id, Text.objects.get(slug='finish').body, reply_markup=kb)
-        _txt = Text.objects.get(slug='total').body + f' {cart.price}'
-        bot.send_message(message.chat.id, text=_txt)
-    else:
-        keyboard(message, Text.objects.get(slug='empty').body)
+    out_cart(message, edt=False)
 
 
-@bot.message_handler(content_types=['text'], func=lambda message: message.text == CART_KB['checkout'])
-def checkout(message):
-    carts = Cart.objects.get(user=User.objects(uid=message.from_user.id).all())
-    for cart in carts:
-        Order.objects.create(user=cart.user, products=cart.product, qty=cart.qty, price=cart.price)
+@bot.callback_query_handler(func=lambda call: call.data == list(CART_KB.keys())[0])
+def checkout(call):
+    user = User.objects(uid=call.from_user.id).first()
+    for cart in Cart.objects(user=user).all():
+        Order.objects.create(user=cart.user, product=cart.product, qty=cart.qty, price=cart.price)
         cart.delete()
-    bot.send_message(message.chat.id, text=Text.objects.get(slug='checkout').body)
+    bot.edit_message_text(Text.objects.get(slug='checkout').body, chat_id=call.message.chat.id,
+                          message_id=call.message.message_id)
 
 
-@bot.message_handler(content_types=['text'], func=lambda message: message.text == CART_KB['erase'])
-def erase(message):
-    carts = Cart.objects.get(user=User.objects(uid=message.from_user.id).all())
-    for cart in carts:
+@bot.callback_query_handler(func=lambda call: call.data == list(CART_KB.keys())[1])
+def erase(call):
+    user = User.objects(uid=call.from_user.id).first()
+    for cart in Cart.objects(user=user).all():
         cart.delete()
-    bot.send_message(message.chat.id, text=Text.objects.get(slug='empty').body)
+    bot.edit_message_text(Text.objects.get(slug='empty').body, chat_id=call.message.chat.id,
+                          message_id=call.message.message_id)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.split(separator)[0] == change_lookup)
 def from_cart_change(call):
-    product_id = call.data.split(separator)[1]
-    product = Products.objects.get(id=product_id)
-    cart = Cart.objects(user=User.objects(uid=call.from_user.id).first(), product=product).first()
+    product = Products.objects(id=call.data.split(separator)[1]).first()
+    user = User.objects(uid=call.from_user.id).first()
+    cart = Cart.objects(user=user, product=product).first()
     change(call, cart)
-
-
-def change(call, cart):
-    kb = InlineKeyboardMarkup()
-    kb.add(InlineKeyboardButton(text=SINGLE_KB['plus'], callback_data=f'{plus_lookup}{separator}{cart.id}'))
-    kb.add(InlineKeyboardButton(text=SINGLE_KB['minus'], callback_data=f'{minus_lookup}{separator}{cart.id}'))
-    kb.add(InlineKeyboardButton(text=SINGLE_KB['delete'], callback_data=f'{fromcart_lookup}{separator}{cart.id}'))
-    bot.send_message(call.message.chat.id, text=Text.objects.get(slug='change').first(), reply_markup=kb)
-    kb = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    kb.add(*[KeyboardButton(text=text) for text in CART_KB.values()])
 
 
 @bot.callback_query_handler(func=lambda call: call.data.split(separator)[0] == plus_lookup)
 def plus_cart_click(call):
-    cart_id = call.data.split(separator)[1]
-    cart = Cart.objects.get(id=cart_id)
+    cart = Cart.objects(id=call.data.split(separator)[1]).first()
     cart.qty += 1
     cart.save()
     change(call, cart)
 
 
-@bot.callback_query_handler(func=lambda call: call.data.split(separator)[0] == plus_lookup)
+@bot.callback_query_handler(func=lambda call: call.data.split(separator)[0] == minus_lookup)
 def minus_cart_click(call):
-    cart_id = call.data.split(separator)[1]
-    cart = Cart.objects.get(id=cart_id)
+    cart = Cart.objects(id=call.data.split(separator)[1]).first()
     if cart.qty > 1:
         cart.qty -= 1
         cart.save()
         change(call, cart)
     else:
         cart.delete()
-        keyboard(call.message, Text.objects.get(slug='product_empty').first())
+        out_cart(call.message)
 
 
 @bot.callback_query_handler(func=lambda call: call.data.split(separator)[0] == fromcart_lookup)
 def from_cart_click(call):
-    cart_id = call.data.split(separator)[1]
-    cart = Cart.objects.get(id=cart_id)
+    cart = Cart.objects(id=call.data.split(separator)[1]).first()
     cart.delete()
-    keyboard(call.message, Text.objects.get(slug='product_empty').first())
+    out_cart(call.message)
+
+
+def out_cart(msg, edt=True):
+    user = User.objects(uid=msg.from_user.id).first()
+    cart_products = [_ for _ in Cart.objects(user=user).all()]
+    if cart_products:
+        kb = InlineKeyboardMarkup()
+        kb.add(*[InlineKeyboardButton(text=f'{cart.product.title} ({cart.qty})',
+                                      callback_data=f'{change_lookup}{separator}{cart.product.id}')
+                 for cart in cart_products])
+        kb.add(*[InlineKeyboardButton(text=value, callback_data=key) for key, value in CART_KB.items()])
+        _from_cart_txt = Text.objects.get(slug='from_cart').body
+        _total_txt = Text.objects.get(slug='total').body
+        _txt = f'{_from_cart_txt}\n{_total_txt} {Cart.user_price(user)}'
+        if edt:
+            bot.edit_message_text(_txt, chat_id=msg.chat.id, message_id=msg.message_id, reply_markup=kb)
+        else:
+            bot.send_message(msg.chat.id, text=_txt, reply_markup=kb)
+    else:
+        bot.edit_message_text(Text.objects.get(slug='empty').body, chat_id=msg.chat.id, message_id=msg.message_id)

@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, validate, ValidationError
+from marshmallow import Schema, fields, validate
 
 
 class CategorySchema(Schema):
@@ -40,12 +40,16 @@ class UserSchema(Schema):
 
 class CartSchema(Schema):
     user = fields.Nested(UserSchema, required=True)
-    products = fields.List(fields.Nested(ProductSchema, required=True))
+    product = fields.Nested(ProductSchema, required=True)
+    price = fields.Float(default=0)
+    qty = fields.Integer(default=1, min=1)
 
 
 class OrderSchema(Schema):
     user = fields.Nested(UserSchema, required=True)
-    products = fields.List(fields.Nested(ProductSchema, required=True))
+    product = fields.Nested(ProductSchema, required=True)
+    price = fields.Float(default=0)
+    qty = fields.Integer(default=1, min=1)
     created = fields.DateTime(dump_only=True, required=True)
 
 
