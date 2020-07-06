@@ -7,12 +7,6 @@ api_bp = Blueprint('api', __name__)
 building_api = Api(api_bp)
 
 
-@api_bp.route('/test')
-def index():
-    print(1)
-    return f'2'
-
-
 building_api.add_resource(
     TotalResource,
     '/',

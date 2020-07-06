@@ -9,12 +9,6 @@ import time
 app = Flask(__name__)
 
 
-@app.route('/test2')
-def index2():
-    print(10)
-    return f'20'
-
-
 @app.route(config.WEBHOOK_PATH, methods=['POST'])
 def webhook():
     if request.headers.get('content-type') == 'application/json':
