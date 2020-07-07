@@ -220,8 +220,11 @@ class CartResource(Resource):
             _product = Products.objects(id=my_dict['product_id']).first()
             _product_dump = ProductSchema(only=("title",)).dumps(_product)
 
+            _parent = _product.category
+            _category = CategorySchema(only=("title", "description",)).dumps(_parent)
+
             my_dict['product'] = json.loads(_product_dump)
-            my_dict.pop('product_id', None)
+            my_dict['product']['category'] = json.loads(_category)
 
             _user = User.objects(id=my_dict['user_id']).first()
             _user_dump = UserSchema(only=("title",)).dumps(_user)
@@ -233,6 +236,7 @@ class CartResource(Resource):
 
             res = CartSchema().loads(json_data)
             res['product'] = _product
+            res['user'] = _user
             Cart.objects(id=id).update(**res)
             data = Cart.objects(id=id).first()
             json_obj = CartSchema().dumps(data)
@@ -261,8 +265,11 @@ class OrderResource(Resource):
             _product = Products.objects(id=my_dict['product_id']).first()
             _product_dump = ProductSchema(only=("title", "category", "description",)).dumps(_product)
 
+            _parent = _product.category
+            _category = CategorySchema(only=("title", "description",)).dumps(_parent)
+
             my_dict['product'] = json.loads(_product_dump)
-            my_dict.pop('product_id', None)
+            my_dict['product']['category'] = json.loads(_category)
 
             _user = User.objects(id=my_dict['user_id']).first()
             _user_dump = UserSchema(only=("title",)).dumps(_user)
@@ -274,6 +281,7 @@ class OrderResource(Resource):
 
             res = OrderSchema().loads(json_data)
             res['product'] = _product
+            res['user'] = _user
             Order.objects.create(**res)
             res = json.loads(OrderSchema().dumps(res))
         except ValidationError as err:
@@ -286,8 +294,11 @@ class OrderResource(Resource):
             _product = Products.objects(id=my_dict['product_id']).first()
             _product_dump = ProductSchema(only=("title",)).dumps(_product)
 
+            _parent = _product.category
+            _category = CategorySchema(only=("title", "description",)).dumps(_parent)
+
             my_dict['product'] = json.loads(_product_dump)
-            my_dict.pop('product_id', None)
+            my_dict['product']['category'] = json.loads(_category)
 
             _user = User.objects(id=my_dict['user_id']).first()
             _user_dump = UserSchema(only=("title",)).dumps(_user)
@@ -299,6 +310,7 @@ class OrderResource(Resource):
 
             res = OrderSchema().loads(json_data)
             res['product'] = _product
+            res['user'] = _user
             Order.objects(id=id).update(**res)
             data = Order.objects(id=id).first()
             json_obj = OrderSchema().dumps(data)
