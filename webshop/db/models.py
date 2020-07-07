@@ -2,7 +2,7 @@ import mongoengine as me
 import datetime
 
 
-me.connect('webshop_adv_april_new')
+me.connect('webshop_adv')
 
 
 class Category(me.Document):
