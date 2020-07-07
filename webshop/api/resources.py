@@ -343,6 +343,42 @@ class TextResource(Resource):
         return jsonify(data)
 
 
+class UserResource(Resource):
+
+    def get(self, id=None):
+        if id:
+            json_obj = UserSchema().dumps(User.objects(slug=id).first())
+        else:
+            json_obj = UserSchema(many=True).dumps(User.objects.all())
+        return jsonify(json.loads(json_obj))
+
+    def post(self):
+        json_data = json.dumps(request.json)
+        try:
+            res = UserSchema().loads(json_data)
+            User.objects.create(**res)
+            res = json.loads(UserSchema().dumps(res))
+        except ValidationError as err:
+            res = err.messages
+        return res
+
+    def put(self, id):
+        json_data = json.dumps(request.json)
+        try:
+            res = UserSchema().loads(json_data)
+            User.objects(slug=id).update(**res)
+            data = User.objects(slug=id).first()
+            json_obj = UserSchema().dumps(data)
+            res = jsonify(json.loads(json_obj))
+        except ValidationError as err:
+            res = err.messages
+        return res
+
+    def delete(self, id):
+        data = User.objects(slug=id).delete()
+        return jsonify(data)
+
+
 class TotalResource(Resource):
 
     def get(self):
