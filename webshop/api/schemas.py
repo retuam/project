@@ -33,6 +33,7 @@ class ProductSchema(Schema):
 
 
 class UserSchema(Schema):
+    id = fields.String(dump_only=True)
     title = fields.String(required=True, validate=[validate.Length(min=1, max=512)])
     is_moderator = fields.Boolean(default=True)
     uid = fields.Integer(dump_only=True, default=0)
