@@ -185,9 +185,24 @@ class CartResource(Resource):
         return jsonify(json.loads(json_obj))
 
     def post(self):
-        json_data = json.dumps(request.json)
+        my_dict = request.json
         try:
+            _product = Products.objects(id=my_dict['product_id']).first()
+            _product_dump = ProductSchema(only=("title",)).dumps(_product)
+
+            my_dict['product'] = json.loads(_product_dump)
+            my_dict.pop('product_id', None)
+
+            _user = User.objects(id=my_dict['user_id']).first()
+            _user_dump = UserSchema(only=("title",)).dumps(_user)
+
+            my_dict['user'] = json.loads(_user_dump)
+            my_dict.pop('user_id', None)
+
+            json_data = json.dumps(my_dict)
+
             res = CartSchema().loads(json_data)
+            res['product'] = _product
             Cart.objects.create(**res)
             res = json.loads(CartSchema().dumps(res))
         except ValidationError as err:
@@ -195,9 +210,24 @@ class CartResource(Resource):
         return res
 
     def put(self, id):
-        json_data = json.dumps(request.json)
+        my_dict = request.json
         try:
+            _product = Products.objects(id=my_dict['product_id']).first()
+            _product_dump = ProductSchema(only=("title",)).dumps(_product)
+
+            my_dict['product'] = json.loads(_product_dump)
+            my_dict.pop('product_id', None)
+
+            _user = User.objects(id=my_dict['user_id']).first()
+            _user_dump = UserSchema(only=("title",)).dumps(_user)
+
+            my_dict['user'] = json.loads(_user_dump)
+            my_dict.pop('user_id', None)
+
+            json_data = json.dumps(my_dict)
+
             res = CartSchema().loads(json_data)
+            res['product'] = _product
             Cart.objects(id=id).update(**res)
             data = Cart.objects(id=id).first()
             json_obj = CartSchema().dumps(data)
@@ -221,9 +251,24 @@ class OrderResource(Resource):
         return jsonify(json.loads(json_obj))
 
     def post(self):
-        json_data = json.dumps(request.json)
+        my_dict = request.json
         try:
+            _product = Products.objects(id=my_dict['product_id']).first()
+            _product_dump = ProductSchema(only=("title",)).dumps(_product)
+
+            my_dict['product'] = json.loads(_product_dump)
+            my_dict.pop('product_id', None)
+
+            _user = User.objects(id=my_dict['user_id']).first()
+            _user_dump = UserSchema(only=("title",)).dumps(_user)
+
+            my_dict['user'] = json.loads(_user_dump)
+            my_dict.pop('user_id', None)
+
+            json_data = json.dumps(my_dict)
+
             res = OrderSchema().loads(json_data)
+            res['product'] = _product
             Order.objects.create(**res)
             res = json.loads(OrderSchema().dumps(res))
         except ValidationError as err:
@@ -231,9 +276,24 @@ class OrderResource(Resource):
         return res
 
     def put(self, id):
-        json_data = json.dumps(request.json)
+        my_dict = request.json
         try:
+            _product = Products.objects(id=my_dict['product_id']).first()
+            _product_dump = ProductSchema(only=("title",)).dumps(_product)
+
+            my_dict['product'] = json.loads(_product_dump)
+            my_dict.pop('product_id', None)
+
+            _user = User.objects(id=my_dict['user_id']).first()
+            _user_dump = UserSchema(only=("title",)).dumps(_user)
+
+            my_dict['user'] = json.loads(_user_dump)
+            my_dict.pop('user_id', None)
+
+            json_data = json.dumps(my_dict)
+
             res = OrderSchema().loads(json_data)
+            res['product'] = _product
             Order.objects(id=id).update(**res)
             data = Order.objects(id=id).first()
             json_obj = OrderSchema().dumps(data)
