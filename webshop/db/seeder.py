@@ -4,8 +4,8 @@ import requests
 
 
 def seed_categories():
-    category_title = [f'Sub category {i}' for i in range(5)]
-    category_description = [f'Sub category description {i}' for i in range(5)]
+    category_title = [f'Category {i}' for i in range(5)]
+    category_description = [f'Category description {i}' for i in range(5)]
     for title, description in zip(category_title, category_description):
         Category.objects.create(title=title, description=description)
 

@@ -20,8 +20,8 @@ def webhook():
         abort(403)
 
 
-bot.remove_webhook()
-time.sleep(1)
+# bot.remove_webhook()
+# time.sleep(1)
 # bot.set_webhook(
 #     config.WEBHOOK_URL,
 #     certificate=open('webhook_cert.pem', 'r')
@@ -31,5 +31,4 @@ time.sleep(1)
 
 
 if __name__ == '__main__':
-    pass
-    # bot.polling()
+    bot.polling()
