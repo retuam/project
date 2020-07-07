@@ -22,11 +22,11 @@ def webhook():
 
 bot.remove_webhook()
 time.sleep(1)
-bot.set_webhook(
-    config.WEBHOOK_URL,
-    certificate=open('webhook_cert.pem', 'r')
-)
-app.register_blueprint(api_bp)
+# bot.set_webhook(
+#     config.WEBHOOK_URL,
+#     certificate=open('webhook_cert.pem', 'r')
+# )
+# app.register_blueprint(api_bp)
 # app.run(debug=True)
 
 
