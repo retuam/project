@@ -39,6 +39,7 @@ class UserSchema(Schema):
 
 
 class CartSchema(Schema):
+    id = fields.String(dump_only=True)
     user = fields.Nested(UserSchema, required=True)
     product = fields.Nested(ProductSchema, required=True)
     price = fields.Float(default=0)
@@ -46,6 +47,7 @@ class CartSchema(Schema):
 
 
 class OrderSchema(Schema):
+    id = fields.String(dump_only=True)
     user = fields.Nested(UserSchema, required=True)
     product = fields.Nested(ProductSchema, required=True)
     price = fields.Float(default=0)
