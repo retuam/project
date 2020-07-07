@@ -218,7 +218,7 @@ class CartResource(Resource):
         my_dict = request.json
         try:
             _product = Products.objects(id=my_dict['product_id']).first()
-            _product_dump = ProductSchema(only=("title",)).dumps(_product)
+            _product_dump = ProductSchema(only=("title", "category", "description",)).dumps(_product)
 
             _parent = _product.category
             _category = CategorySchema(only=("title", "description",)).dumps(_parent)
@@ -292,7 +292,7 @@ class OrderResource(Resource):
         my_dict = request.json
         try:
             _product = Products.objects(id=my_dict['product_id']).first()
-            _product_dump = ProductSchema(only=("title",)).dumps(_product)
+            _product_dump = ProductSchema(only=("title", "category", "description",)).dumps(_product)
 
             _parent = _product.category
             _category = CategorySchema(only=("title", "description",)).dumps(_parent)
