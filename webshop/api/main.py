@@ -53,3 +53,9 @@ building_api.add_resource(
     '/text',
     '/text/<id>'
 )
+
+building_api.add_resource(
+    UserResource,
+    '/user',
+    '/user/<id>'
+)
