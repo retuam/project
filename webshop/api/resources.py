@@ -207,6 +207,7 @@ class CartResource(Resource):
 
             res = CartSchema().loads(json_data)
             res['product'] = _product
+            res['user'] = _user
             Cart.objects.create(**res)
             res = json.loads(CartSchema().dumps(res))
         except ValidationError as err:

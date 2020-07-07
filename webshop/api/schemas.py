@@ -41,7 +41,7 @@ class UserSchema(Schema):
 
 class CartSchema(Schema):
     id = fields.String(dump_only=True)
-    user = fields.Nested(UserSchema, required=True)
+    # user = fields.Nested(UserSchema, required=True)
     product = fields.Nested(ProductSchema, required=True)
     price = fields.Float(default=0)
     qty = fields.Integer(default=1, min=1)
