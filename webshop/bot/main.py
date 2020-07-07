@@ -206,4 +206,7 @@ def out_cart(msg, edt=True):
         else:
             bot.send_message(msg.chat.id, text=_txt, reply_markup=kb)
     else:
-        bot.edit_message_text(Text.objects.get(slug='empty').body, chat_id=msg.chat.id, message_id=msg.message_id)
+        if edt:
+            bot.edit_message_text(Text.objects.get(slug='empty').body, chat_id=msg.chat.id, message_id=msg.message_id)
+        else:
+            bot.send_message(msg.chat.id, text=Text.objects.get(slug='empty').body)
